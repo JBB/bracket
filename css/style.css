@@ -1,0 +1,169 @@
+section.main-cols {
+  -moz-column-count:6   /*Firefox */
+  -webkit-column-count:6; /* Safari and Chrome */
+  column-count:6;
+}
+
+div.main {
+  width: 960px;
+}
+div.menu-bar {
+  width: 960px;
+  border-bottom: 1px solid green;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+div.column-titles {
+  width: 960px;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  font-weight: bold;
+  text-align: center;
+}
+
+div.one-column {
+  width:        150px;
+  margin-right: 10px;
+  float:        left;
+}
+
+div.one-box-round1 {
+  width:         150px;
+  margin-bottom: 5px;
+  border:        2px solid blue;
+}
+div.one-box-round2-top {
+  width:        150px;
+  margin-top:   30px;
+  border:       2px solid blue;
+}
+div.one-box-round2-new-quarter {
+  width:        150px;
+  margin-top:   72px;
+  border:       2px solid blue;
+}
+div.one-box-round2 {
+  width:        150px;
+  margin-top:   60px;
+  border:       2px solid blue;
+}
+div.one-box-round3-top {
+  width:        150px;
+  margin-top:   86px;
+  border:       2px solid blue;
+}
+div.one-box-round3-new-quarter {
+  width:        150px;
+  margin-top:   181px;
+  border:       2px solid blue;
+}
+div.one-box-round3 {
+  width:        150px;
+  margin-top:   170px;
+  border:       2px solid blue;
+}
+div.one-box-round4-top {
+  width:        150px;
+  margin-top:   190px;
+  border:       2px solid blue;
+}
+div.one-box-round4 {
+  width:        150px;
+  margin-top:   405px;
+  border:       2px solid blue;
+}
+div.one-box-round5-top {
+  width:        150px;
+  margin-top:   430px;
+  border:       2px solid blue;
+}
+div.one-box-round5 {
+  width:        150px;
+  margin-top:   850px;
+  border:       2px solid blue;
+}
+div.one-box-round6-top {
+  width:        150px;
+  margin-top:   1px;
+  border:       2px solid blue;
+}
+div.one-box-round6 {
+  width:        150px;
+  margin-top:   0px;
+  border:       2px solid blue;
+}
+span.finals-text-top {
+  display:    block;
+  margin-top: 845px;
+}
+
+span.team-box {
+  display:       block;
+  width:         140px;
+  height:        20px;
+  padding-left:  3px;
+  /*border:        2px solid red; */
+  border-radius: 4px;
+  cursor:        move;
+}
+.team-box.selected {
+  opacity:       0.4;
+}
+.team-box.over {
+  border: 2px dashed #000;
+}
+hr.team-box-hr {
+  width: 80%;
+  margin: 2px 0px 2px 8px;
+  border: 1px solid blue;
+}
+span.seed {
+  font-size:     x-small;
+  padding:       3px 2px 0px 1px;
+  float:         left;
+}
+
+/* Buttons */
+button.menu-button {
+  margin: 5px 25px 5px 25px;
+  border-top: 1px solid #96d1f8;
+  background: #65a9d7;
+  background: -webkit-gradient(linear, left top, left bottom, from(#3e779d), to(#65a9d7));
+  background: -webkit-linear-gradient(top, #3e779d, #65a9d7);
+  background: -moz-linear-gradient(top, #3e779d, #65a9d7);
+  background: -ms-linear-gradient(top, #3e779d, #65a9d7);
+  background: -o-linear-gradient(top, #3e779d, #65a9d7);
+  padding: 5px 10px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+  -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+  box-shadow: rgba(0,0,0,1) 0 1px 0;
+  text-shadow: rgba(0,0,0,.4) 0 1px 0;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: Georgia, serif;
+  vertical-align: middle; 
+}
+button.menu-button:hover {
+   border-top-color: #28597a;
+   background: #28597a;
+   color: #ccc;
+}
+button.menu-button:active {
+   border-top-color: #1b435e;
+   background: #1b435e;
+}
+button[disabled].menu-button {
+   border-top-color: #000000;
+   background: #000000;
+  color: white;
+}
+button[disabled].menu-button:hover {
+  color: white;
+}
+button[disabled].menu-button:active {
+  color: white;
+}

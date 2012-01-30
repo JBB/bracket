@@ -1,0 +1,10 @@
+      if 
+        (((dropZoneId[1] != "ff") && (priorGameCalc == 0 ) && 
+          (dropZoneId[5] == 2)) || 
+        ((dropZoneId[1] != "ff") && (priorGameCalc == 1 ) && 
+          (dropZoneId[5] == 1)) ||
+        ((dropZoneId[1] == "ff" ) && (dropZoneId[5] == 1) && 
+          (qtrSrcOddEven == 1 )) ||
+        ((dropZoneId[1] == "ff" ) && (dropZoneId[5] == 2) && 
+          (qtrSrcOddEven == 0 )) ||
+        ((dropZoneId[1] == "ff" ) && (dropZoneId[3] == 2))) 
