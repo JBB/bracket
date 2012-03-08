@@ -26,7 +26,7 @@ Element.prototype.removeClassName = function(name) {
 <body>
 <section class="main">
   <header>
-    <h1>It works, example 2!</h1>
+    <h1>Welcome to the empyre.com NCAA pool</h1>
   </header>
   <div class="main">
     <div class="menu-bar">
@@ -457,11 +457,30 @@ Element.prototype.removeClassName = function(name) {
       </div>
       Finalist
     </div>
-  
+
   </div>
   <!--end main-->
 
 </section>
+
+<br clear=all>
+<hr class="bottom-break">
+<!--JBB need to pretty up classes for down here-->
+<!--<form id="post-picks" name="post-picks" action="process_submission.php" method="post">-->
+<form id="post-picks" name="post-picks" action="processor.cgi" method="post">
+  <input type=hidden id="picks" name="picks">
+  <input type=text size=20 name="username" placeholder="username"><br>
+  <input type=password size=20 name="password" placeholder="password"><br>
+</form>
+<button type="button" id="submit-button" class="submit-button" onclick="handleSubmit();">Submit Picks</button><br>
+JBB - Could have picks submitted automatically each time you make a change.
+i.e, not submit button<br>
+JBB - Write picks to local storage as we go or grab all picks at time of submit?
+JBB - Use local storage?
+JBB - Restore a particular set of picks for editing later? requires user/pw
+JBB - What if person wants to make multiple entries
+JBB - Store MAC or something to limit num entries per thingy?
+JBB - Right now you can overwrite someone else's entry. Could have a math problem to solve
 
 <script>
 var dragSrcEl = null;
@@ -815,6 +834,39 @@ var teams = document.querySelectorAll('.team-box');
     roundOneTeams[team.id] = team.innerHTML;
   } 
 });
+
+function handleSubmit() {
+//build JSON var with all picks, user, pw, MAC and anything else we capture
+//update form variable and submit form
+/*  
+  var theForm = document.getElementsByName('post-picks');
+  theForm.username = "JBB";
+  theForm.password = "a password was here";
+  theForm.picks = "JSON obj goes here";
+  theForm.submit();
+  */
+
+
+  var theForm = document.getElementById('post-picks');
+  theForm.password.value = "test password";
+  if (theForm.username.value == "") {
+    alert("Please provide a user name");
+  } else {
+  var picks = "";
+  //var json_picks =  eval("(" + picks + ")");
+  //var fullPicks = {w11: "Stanford", w12: "UNC Charlotte", e11: "UConn", e12: "Winston-Salem"};
+  //var JSONstr = JSON.stringify(fullPicks);
+    
+    [].forEach.call(teams, function(team) {
+      //{team.id: team.innerHTML;}
+      //want the above JSON in the picks form var
+      //theForm.picks.value = eval(json_str);;
+      picks += team.id + "," + team.innerHTML + ",";
+    });
+    theForm.picks.value = picks;
+    theForm.submit();
+  }    
+}
 
 </script>
 
