@@ -29,6 +29,7 @@ my $person;
 my $password;
 my $token; #could use this to validate human submitted form
 my @arr; 
+my %teams;
 
 foreach $pair (@pairs)
 {
@@ -45,53 +46,69 @@ foreach $pair (@pairs)
 	print "Location: http://www.empyre.com/ncaa/noName.htm\n\n";
         exit 0;
     }
-    $person = $value;
-    $picks[$j] = "$name\t$value";
-	  $value =~ s/"//g;
-	  $value =~ s/'//g;
-	  $teams{'person'} = $value;
-    $j++;
+    $value =~ s/"//g;
+    $value =~ s/'//g;
+    $person = $teams{'person'} = $value;
   }
 
  if ($name eq "password")
   {
-    $value =~ s/\s//g;
-    $password = lc($value); 
-    $picks[$j] = "$name\t$value";
-    $j++;
+    $value =~ s/%([A-Za-z0-9]{2})/chr hex $1/ge;
+    $value =~ s/\+/ /g;
+    $password = $value; 
+    #$value =~ s/\s//g;
+    #$password = lc($value); 
     #if ($value ne "jay"){
-	  #print "Location: http://www.empyre.com/ncaa/passWd.htm\n\n";
-    #exit 0;
+    #  print "Location: http://www.empyre.com/ncaa/passWd.htm\n\n";
+    #  exit 0;
     #}
   }
 
  if ($name eq "token")
   {
     #if token isn't what it should be, exit
-    #if ($value ne "jay"){
-    #print "Location: http://www.empyre.com/ncaa/passWd.htm\n\n";
-    #exit 0;
+    $value =~ s/\s//g;
+    $value = lc($value); 
+    if ($value ne "jay"){
+      print "Location: http://www.empyre.com/ncaa/passWd.htm\n\n";
+      exit 0;
+    }
   }
 
   if ($name eq "picks")
   {
-    @arr = ($value =~ m/\w+/g);
+    #@arr = ($value =~ m/\w+/g);
+    $value =~ s/%([A-Za-z0-9]{2})/chr hex $1/ge;
+    $value =~ s/\+/ /g;
+    $value =~ s/\'//g;
+    @arr = split(/\,/, $value);
 
     for($j=0;$j<=$#arr;$j++){
       $picks[$j] = "$arr[$i]\t$arr[$i+1]";
-      $arr[$i+1] =~ s/%([A-Za-z0-9]{2})/chr hex $1/ge;
-      $arr[$i+1] =~ s/\+/ /g;
+      #$arr[$i+1] =~ s/%([A-Za-z0-9]{2})/chr hex $1/ge;
+      #$arr[$i+1] =~ s/\+/ /g;
       $teams{$arr[$i]} = $arr[$i+1];
       $j++;
       $i = $i + 2;
     }
+    $picks[$j] = "username\t$person";
+    $j++;
+    $picks[$j] = "password\t$password";
+    $j++;
   }
 
 }
+#check to see if we have an entry by that name
+my $filename = "./out12/$person.out";
+if (-e $filename) {
+  print "Location: http://www.empyre.com/ncaa/entryByThatNameExists.htm\n\n";
+  exit 0;
+}
+#end check
 
 open(OUT, ">./out12/$person.out");
 for($j=0;$j<=$#picks;$j++){
-	print OUT "$picks[$j]\n";
+  print OUT "$picks[$j]\n";
 }
 close OUT;
 
