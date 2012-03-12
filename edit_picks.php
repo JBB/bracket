@@ -702,8 +702,6 @@ function handleDrop(event) {
         }
       }
     }
-    console.log('champ: ' + championHalf);
-    console.log('finalist: ' + finalistHalf);
 
     but = document.getElementById('autoFill')
     but.disabled = true;
@@ -729,7 +727,6 @@ function calculateHalf(srcId) {
   {
     return 2;
   } else {
-    console.log(srcId)
     return 1;
   }
 }
