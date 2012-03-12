@@ -193,7 +193,7 @@ while ($count <= $#standings){
           print "<div id=\"$standings[$count][0]\" style=\"display: none;\">\n";
           print "<form action=\"edit_picks.php\" method=\"POST\">\n";
           print "<input type=hidden name=\"username\" value=\"$standings[$count][0]\">\n";
-          print "<input type=hidden name=\"token\" value\"jay\">\n";
+          print "<input type=hidden name=\"token\" value=\"jay\">\n";
           print "<input type=password name=\"password\" placeholder=\"password\">\n";
           print "<input type=submit value=\"Edit Picks\">\n";
           print "</form>\n";
