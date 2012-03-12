@@ -92,6 +92,9 @@ div.one-box-round6 {
   margin-top:   0px;
   border:       2px solid blue;
 }
+div#editPicks {
+  display: none;
+}
 span.finals-text-top {
   display:    block;
   margin-top: 845px;

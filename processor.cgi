@@ -84,6 +84,7 @@ foreach $pair (@pairs)
     @arr = split(/\,/, $value);
 
     for($j=0;$j<=$#arr;$j++){
+      #chomp($arr[$i+1]);
       $picks[$j] = "$arr[$i]\t$arr[$i+1]";
       #$arr[$i+1] =~ s/%([A-Za-z0-9]{2})/chr hex $1/ge;
       #$arr[$i+1] =~ s/\+/ /g;
@@ -98,12 +99,14 @@ foreach $pair (@pairs)
   }
 
 }
-#check to see if we have an entry by that name
+#check to see if we have an entry by that name and if edit is not authorized
 my $filename = "./out12/$person.out";
-if (-e $filename) {
+my $filename2 = "./out12/$person.tmp";
+if ((-e $filename) && (! -e $filename2)) {
   print "Location: http://www.empyre.com/ncaa/entryByThatNameExists.htm\n\n";
   exit 0;
 }
+`rm $filename2`;
 #end check
 
 open(OUT, ">./out12/$person.out");

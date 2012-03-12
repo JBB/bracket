@@ -1,0 +1,16 @@
+($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+my $stop = 0;
+
+if (($mday == 17) && ($hour >= 17)) { ##GMT
+	print "Location: http://www.empyre.com/ncaa/toolate.htm\n\n";
+	$stop = 1;
+}
+
+if ($mday > 17) {
+	print "Location: http://www.empyre.com/ncaa/toolate.htm\n\n";
+	$stop = 1;
+}
+if ($mon != 2){
+	print "Location: http://www.empyre.com/ncaa/toolate.htm\n\n";
+	$stop = 1;
+}

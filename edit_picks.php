@@ -1,32 +1,107 @@
+<?php
+
+$username = htmlspecialchars($_POST["username"]);
+$pw = htmlspecialchars($_POST["password"]);
+
+//if file doesn't exist, add message before displaying home page that says
+//"no such entry to edit"
+//if pw doesen't match redirect to a page that has that message and points
+//them back to standings
+$now = getdate();
+if 
+(
+  ($now[mday] > 15) || ($now[mon] != 3) ||
+  (($now[mday] == 15) && ($now[hours] > 15))
+)
+{
+  header("Location: http://www.empyre.com/ncaa/toolate.htm");
+  exit;
+}
+
+
+$fileData;
+$path_to_file = "./out12/biff5.out";
+if (file_exists($path_to_file)) {
+  $file = fopen($path_to_file,"r");
+  while(!feof($file)) {
+    list($name,$value) = split("\t",fgets($file));
+    $fileData[$name] = $value;
+  }
+  fclose($file);
+} else {
+  header("Location: http://www.empyre.com/ncaa/invalid.htm");
+  exit;
+}
+
+$fileData['username'] = trim($fileData['username']);
+$fileData['password'] = trim($fileData['password']);
+if ($pw != $fileData['password']) {
+  header("Location: http://www.empyre.com/ncaa/editpw.htm");
+  exit;
+}
+
+//Do some logging
+$file = fopen("ncaa.log","a");
+$stringData = $fileData['username'] . " edited picks at " . date(DATE_RFC822) . "\n";
+fwrite($file, $stringData);
+fclose($file);
+
+//write a temp file to tell processor.cgi it's OK to overwrite
+$file = fopen("./out12/" . $fileData['username'] . ".tmp","w");
+fwrite($file, "green light");
+fclose($file);
+
+?>
 <html>
 <head>
+
 <title>NCAA Tournament Bracket</title>
 <link rel="stylesheet" href="css/style.css">
-<!--JBB Don't need script below since using classList.add/remove-->
+
 <script>
-Element.prototype.hasClassName = function(name) {
-  return new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)").test(this.className);
-};
+var json_picks = <?php echo json_encode($fileData); ?>;
+var finalistHalf = null;
+var championHalf = null;
 
-Element.prototype.addClassName = function(name) {
-  if (!this.hasClassName(name)) {
-    this.className = this.className ? [this.className, name].join(' ') : name;
-  }
-};
+function rePopulate() {
+  var teams = document.querySelectorAll('.team-box');
+  var theForm = document.getElementById('post-picks');
+  theForm.username.value = json_picks['username'];
+  theForm.password.value = json_picks['password'];
 
-Element.prototype.removeClassName = function(name) {
-  if (this.hasClassName(name)) {
-    var c = this.className;
-    this.className = c.replace(new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)", "g"), "");
+    
+  [].forEach.call(teams, function(team) {
+    document.getElementById(team.id).innerHTML = json_picks[team.id];
+  });
+     
+  var check0 = document.getElementById('ff1r2g1t1');
+  var check1 = document.getElementById('ff1r2g1t2');
+  var check2 = document.getElementById('ff1r1g1t1');
+  var check3 = document.getElementById('ff1r1g1t2');
+  if (check0.innerHTML.length > 1) {
+    if ((check0.innerHTML == check2.innerHTML) || 
+        (check0.innerHTML == check3.innerHTML)) {
+      championHalf = 1;
+    } else {
+      championHalf = 2;
+    }
   }
-};
+  if (check1.innerHTML.length > 1) {
+    if ((check1.innerHTML == check2.innerHTML) || 
+        (check1.innerHTML == check3.innerHTML)) {
+      finalistHalf = 1;
+    } else {
+      finalistHalf = 2;
+    }
+  }
+}
 </script>
 </head>
+<body onload="rePopulate();">
 
-<body>
 <section class="main">
   <header>
-    <h1>Welcome to the empyre.com NCAA pool</h1>
+    <h1>Hello <?= $fileData['username'] ?>, you may edit your picks for the empyre.com NCAA pool</h1>
   </header>
   <div class="main">
     <div class="menu-bar">
@@ -470,7 +545,7 @@ Element.prototype.removeClassName = function(name) {
 <form id="post-picks" name="post-picks" action="processor.cgi" method="post">
   <input type=text size=20 name="username" placeholder="username"><br>
   <input type=password size=20 name="password" placeholder="choose a password"><br>
-  <input type=password size=20 name="token" placeholder="host of pool's first name"><br>
+  <input type=hidden size=20 name="token" value="jay"><br>
   <input type=hidden id="picks" name="picks">
 </form>
 <button type="button" id="submit-button" class="submit-button" onclick="handleSubmit();">Submit Picks</button><br>
@@ -479,9 +554,6 @@ Element.prototype.removeClassName = function(name) {
 var dragSrcEl = null;
 var dropZoneId = null;
 var dragSrcId = null;
-var finalistHalf = null;
-var championHalf = null;
-
 
 function handleDragStart(event) {
   //this.style.opacity = '0.4';
@@ -850,6 +922,9 @@ function handleSubmit() {
 }
 
 </script>
+
+</body>
+</html>
 
 </body>
 </html>

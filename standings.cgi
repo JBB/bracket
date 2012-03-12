@@ -5,10 +5,26 @@ use Fcntl ':flock';
 
 
 my $now = localtime;
+($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+my $editOK = 1;
+
+if (($mday == 17) && ($hour >= 17)) { ##GMT
+	$editOK= 0;
+}
+
+if ($mday > 17) {
+	$editOK = 0;
+}
+if ($mon != 2){
+	$editOK = 0;
+}
+
 print "Content-type: text/html\n\n";
 print "<HTML><HEAD>\n";
-print "<Title>NCAA Tournament 2011 Standings as of $now GMT </Title></HEAD>\n";
+print "<Title>NCAA Tournament 2011 Standings as of $now GMT </Title>\n";
 
+print "<link rel=\"stylesheet\" href=\"css/style.css\">";
+print "</HEAD>\n";
 print "<BODY BGCOLOR=\"#FFA702\" text=\"000000\" link=\"880000\" vlink=\"880000\" alink=\"880000\">\n";
 print "<center>\n";
 
@@ -160,7 +176,7 @@ print "<td align=left width=15%></td><td align=center width=70%>\n";
 
 my @standings = sort {$b->[1] <=> $a->[1]} map { [ $_,$rank{$_} ] } keys %rank;
 print "<br><TABLE border=1 cellspacing=1>\n";
-print "<tr><td align=center width=10%><b>Rank</b></td><td align=center width=50%><b>Coach</b></td><td align=center width=15%><b>Wins</b></td><td align=center width=25%><b>View Picks</b></tr>\n";
+print "<tr><td align=center width=10%><b>Rank</b></td><td align=center width=50%><b>Coach</b></td><td align=center width=15%><b>Wins</b></td><td align=center width=25%><b>View Picks</b></td></tr>\n";
 
 #foreach $key (sort keys %rank){
 while ($count <= $#standings){
@@ -171,9 +187,21 @@ while ($count <= $#standings){
 		$margin = 0;
 	}
 	my $place = $count + 1 - $margin;
-	print "<tr><td align=center width=10%>$place</td><td align=center width=50%>$standings[$count][0]</td><td align=center width=15%>$standings[$count][1]</td><td align=center width=25%><a href=\"./picks12/$standings[$count][0].htm\">View Picks</a></tr>\n";
-
-	$marginCheck = $standings[$count][1];
+	print "<tr><td align=center width=10%>$place</td><td align=center width=50%>$standings[$count][0]</td><td align=center width=15%>$standings[$count][1]</td><td align=center width=25%><a href=\"./picks12/$standings[$count][0].htm\">View Picks</a>";
+        if ($editOK == 1) {
+          print " | <a href=\"#\" onclick=\"document.getElementById('$standings[$count][0]').style.display='';\">Edit Picks</a>\n";
+          print "<div id=\"$standings[$count][0]\" style=\"display: none;\">\n";
+          print "<form action=\"edit_picks.php\" method=\"POST\">\n";
+          print "<input type=hidden name=\"username\" value=\"$standings[$count][0]\">\n";
+          print "<input type=hidden name=\"token\" value\"jay\">\n";
+          print "<input type=password name=\"password\" placeholder=\"password\">\n";
+          print "<input type=submit value=\"Edit Picks\">\n";
+          print "</form>\n";
+          print "</div>\n";
+        } 
+        print "</td></tr>\n";
+	
+        $marginCheck = $standings[$count][1];
 	$count++;
 	
 }
@@ -184,5 +212,12 @@ print "</td><td align=right width=15%></td></tr></table>\n";
 print "</center>\n";
 
 close LOG;
+
+print "<script>\n";
+print "function showForm() {\n";
+print "document.getElementById('editPicks').style.display=\"show\";\n";
+print "}\n";
+print "</script>\n";
+
 print "</body></html>\n";
 
